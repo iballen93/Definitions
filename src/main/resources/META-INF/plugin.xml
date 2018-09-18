@@ -1,0 +1,34 @@
+<idea-plugin>
+    <id>com.main.Definitions</id>
+    <name>Definitions</name>
+    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <change-notes>
+        change notes
+    </change-notes>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <application-components>
+
+    </application-components>
+
+    <project-components>
+
+    </project-components>
+
+    <actions>
+        <action id="generateDialog" class="com.componets.actions.HelloAction" text="Get Definition" description="yo yo yo">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij"></extensions>
+</idea-plugin>
