@@ -27,6 +27,7 @@ public class HelloAction extends AnAction {
         e.getPresentation().setEnabled(psiClass != null);
     }
 
+
     private PsiClass getPsiClassFromContext(AnActionEvent e) {
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
