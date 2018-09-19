@@ -9,16 +9,18 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.fest.util.Strings;
+
+import javax.swing.*;
+import java.io.IOException;
 
 public class HelloAction extends AnAction {
 
     private String elementText;
 
     public void actionPerformed(AnActionEvent e) {
-        PsiClass psiClass = getPsiClassFromContext(e);
-        GenerateDialogue generateDialogue = new GenerateDialogue(psiClass, elementText);
-        generateDialogue.show();
+        getPsiClassFromContext(e);
+        JFrame frame = new JFrame("FrameDemo");
+        JOptionPane.showMessageDialog(frame, getJavaDefinition(elementText));
     }
 
     @Override
@@ -37,11 +39,19 @@ public class HelloAction extends AnAction {
         int offset = editor.getCaretModel().getOffset();
         PsiElement psiElement = psiFile.findElementAt(offset);
         setElementText(psiElement.getText().replace("\"", ""));
-
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
     private void setElementText(String elementText) {
         this.elementText = elementText;
+    }
+
+    private String getJavaDefinition(String term) {
+        try {
+            JavaTermsGlossary.buildGlossary();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return JavaTermsGlossary.getDefinition(term);
     }
 }
