@@ -15,12 +15,17 @@ import java.io.IOException;
 
 public class HelloAction extends AnAction {
 
+    private String elementKeyword;
     private String elementText;
 
     public void actionPerformed(AnActionEvent e) {
         getPsiClassFromContext(e);
+        displayDialog();
+    }
+
+    private void displayDialog() {
         JFrame frame = new JFrame("FrameDemo");
-        JOptionPane.showMessageDialog(frame, getJavaDefinition(elementText));
+        JOptionPane.showMessageDialog(frame, "Term: " + elementText + "\nDefinition: " + getJavaDefinition(elementText));
     }
 
     @Override
@@ -29,21 +34,24 @@ public class HelloAction extends AnAction {
         e.getPresentation().setEnabled(psiClass != null);
     }
 
-
-    private PsiClass getPsiClassFromContext(AnActionEvent e) {
-        PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
-        Editor editor = e.getData(PlatformDataKeys.EDITOR);
+    private PsiClass getPsiClassFromContext(AnActionEvent actionEvent) {
+        PsiFile psiFile = actionEvent.getData(LangDataKeys.PSI_FILE);
+        Editor editor = actionEvent.getData(PlatformDataKeys.EDITOR);
         if (psiFile == null || editor == null) {
             return null;
         }
         int offset = editor.getCaretModel().getOffset();
         PsiElement psiElement = psiFile.findElementAt(offset);
-        setElementText(psiElement.getText().replace("\"", ""));
-        return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
-    }
 
-    private void setElementText(String elementText) {
-        this.elementText = elementText;
+        setElementText(psiElement.getText().replace("\"", ""));
+
+        /*try {
+            setElementKeyword(((PsiKeywordImpl) psiElement).getTokenType().toString());
+        } catch (Exception e) {
+            setElementKeyword(((PsiIdentifierImpl) psiElement).getTokenType().toString());
+        }*/
+
+        return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
     private String getJavaDefinition(String term) {
@@ -53,5 +61,13 @@ public class HelloAction extends AnAction {
             e.printStackTrace();
         }
         return JavaTermsGlossary.getDefinition(term);
+    }
+
+    private void setElementText(String elementText) {
+        this.elementText = elementText;
+    }
+
+    private void setElementKeyword(String elementKeyword) {
+        this.elementKeyword = elementKeyword;
     }
 }
