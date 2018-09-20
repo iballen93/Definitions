@@ -17,6 +17,7 @@ public class HelloAction extends AnAction {
 
     private String elementKeyword;
     private String elementText;
+    private String thssf;
 
     public void actionPerformed(AnActionEvent e) {
         getPsiClassFromContext(e);
