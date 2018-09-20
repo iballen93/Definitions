@@ -13,8 +13,10 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.Gray;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,8 +35,21 @@ public class HelloAction extends AnAction {
     }
 
     private void displayDialog() {
-        JFrame frame = new JFrame("FrameDemo");
-        JOptionPane.showMessageDialog(frame, "Term: " + elementText + "\nDefinition: " + getJavaDefinition(elementText) + "\n\n" + "Urban Term: " + elementText + "\nDefinition " + getDefinitionFromJsonString(getJSONString("http://api.urbandictionary.com/v0/define?term={" + elementText + "}")).replace("\n\n", "\n"));
+        String javaTermAndDefinition = "Java Term: " + elementText + "<br>Java Definition: " + getJavaDefinition(elementText);
+        String urbanTermAndDefinition = "Urban Term: " + elementText + "<br>Definition " + getDefinitionFromJsonString(getJSONString("http://api.urbandictionary.com/v0/define?term={" + elementText + "}")).replace("<br><br>", "<br>");
+        JEditorPane editorPane = new JEditorPane("text/html", "<font face=\"Nunito\">" + javaTermAndDefinition + "<br><br><br>" + urbanTermAndDefinition + "</font>");
+        editorPane.addHyperlinkListener(e -> {
+            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                try {
+                    java.awt.Desktop.getDesktop().browse(java.net.URI.create(e.getURL().toString()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        editorPane.setEditable(false);
+        editorPane.setBackground(Gray._242);
+        JOptionPane.showMessageDialog(null, editorPane, "Definitions", JOptionPane.PLAIN_MESSAGE);
     }
 
     @Override

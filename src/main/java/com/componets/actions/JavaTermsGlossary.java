@@ -49,8 +49,10 @@ public class JavaTermsGlossary {
                 return glossaryName[2];
             }
         }
-        return "Definition not found. \nTry using https://www.google.com/search?q=" + term.replace(" ", "%20")
-                + "\nor https://www.google.com/search?q=" + "Java%20" + term.replace(" ", "%20");
+        String termGoogleUrl = "https://www.google.com/search?q=" + term.replace(" ", "%20");
+        String javaTermGoogleUrl = "https://www.google.com/search?q=" + "Java%20" + term.replace(" ", "%20");
+        return "Definition not found. <br><br>Try using <a href=\"" + termGoogleUrl + "\">" + termGoogleUrl + "</a>"
+                + "<br>or " + "<a href=\"" + javaTermGoogleUrl + "\">" + javaTermGoogleUrl + "</a>";
     }
 
     private static boolean isNullOrEmpty(String string) {
