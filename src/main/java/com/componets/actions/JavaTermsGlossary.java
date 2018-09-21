@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class JavaTermsGlossary {
+public class JavaTermsGlossary implements DefinitionLookup {
 
     private static String[][] glossary = new String[250][3];
 
-    private static String getHTML(final String url) throws IOException {
+    private String getHTML(final String url) throws IOException {
         String html = new Scanner(new URL(url).openStream(), "UTF-8").useDelimiter("\\A").next();
         html = html.replace("<P>", "<p>");
         html = html.replace("</A>", "</a>");
@@ -20,7 +20,7 @@ public class JavaTermsGlossary {
         return html;
     }
 
-    public static void buildGlossary() throws IOException {
+    public void buildGlossary() throws IOException {
         String html = getHTML("https://docs.oracle.com/javase/tutorial/information/glossary.html");
         String[] namesTermsDefinitions = html.split("<dl>")[1].split("<p>");
         int position = 0;
@@ -35,7 +35,7 @@ public class JavaTermsGlossary {
         }
     }
 
-    public static String getDefinition(final String term) {
+    public String getDefinition(final String term) {
         if (isNullOrEmpty(term) || !term.matches("[a-zA-Z][a-zA-Z ]*")) {
             return "Please provide a valid term to receive a definition.";
         }

@@ -79,12 +79,13 @@ public class HelloAction extends AnAction {
     }
 
     private String getJavaDefinition(String term) {
+        JavaTermsGlossary javaTermsGlossary = new JavaTermsGlossary();
         try {
-            JavaTermsGlossary.buildGlossary();
+            javaTermsGlossary.buildGlossary();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return JavaTermsGlossary.getDefinition(term);
+        return javaTermsGlossary.getDefinition(term);
     }
 
     private void setElementText(String elementText) {

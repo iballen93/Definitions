@@ -1,6 +1,6 @@
 package com.componets.actions;
 
-public class UrbanDictionaryLookup {
+public class UrbanDictionaryLookup implements DefinitionLookup{
 
     private String word;
 
@@ -9,6 +9,10 @@ public class UrbanDictionaryLookup {
     }
     //https://github.com/zdict/zdict/wiki/Urban-dictionary-API-documentation
     //https://github.com/stleary/JSON-java
+
+    public String getDefinition(String term) {
+        return "";
+    }
 
 
 
