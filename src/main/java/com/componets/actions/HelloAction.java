@@ -86,6 +86,7 @@ public class HelloAction extends AnAction {
         popup.showInFocusCenter();
     }
 
+    //TODO refactor out the checking of strings. Limit the max size of the intellij popup
     private String getDefinitions() {
         String definitions = "";
         String javaTermAndDefinition = "<h3>Java Glossary</h3>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
