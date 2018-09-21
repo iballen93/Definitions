@@ -40,6 +40,8 @@ public class Wiktionary implements IDefinitionLookup {
         return jsonResponse;
     }
 
+    //TODO get adjective, noun, then verb.
+    //https://googledictionaryapi.eu-gb.mybluemix.net/?define=specious
     private String getElementFromJsonResponse(String jsonResponse, String element) {
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
         JsonObject jsonObject1 = jsonObject.getAsJsonObject("meaning");
