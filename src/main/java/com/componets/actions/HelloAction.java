@@ -37,7 +37,8 @@ public class HelloAction extends AnAction {
         String javaTermAndDefinition = "Java Glossary<br>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
         String wordsApiTermAndDefinition = "Term: " + elementText + "<br>Definition: " + wordsAPILookup.getDefinition(elementText);
         String urbanTermAndDefinition = "Urban Dictionary<br>Term: " + elementText + "<br>Definition: " + urbanDictionaryLookup.getDefinition(elementText);
-        JEditorPane editorPane = new JEditorPane("text/html", "<font face=\"Nunito\">" + javaTermAndDefinition + "<br><br><br>" + wordsApiTermAndDefinition + "<br><br><br>" + urbanTermAndDefinition +"</font>");
+        String urbanTermExample = "<br>" + urbanDictionaryLookup.getExample(elementText);
+        JEditorPane editorPane = new JEditorPane("text/html", "<font face=\"Nunito\">" + javaTermAndDefinition + "<br><br><br>" + wordsApiTermAndDefinition + "<br><br><br>" + urbanTermAndDefinition + urbanTermExample + "</font>");
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 try {

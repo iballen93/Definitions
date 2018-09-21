@@ -14,23 +14,19 @@ import java.net.URL;
 public class UrbanDictionaryLookup implements IDefinitionLookup {
     //https://github.com/zdict/zdict/wiki/Urban-dictionary-API-documentation
     //https://github.com/stleary/JSON-java
-
-
     public String getDefinition(String term) {
         String jsonResponse;
         String url = "http://api.urbandictionary.com/v0/define?term={" + term + "}";
 
         jsonResponse = getResponseAsString(url);
-        return getDefinitionFromJsonString(jsonResponse);
+        return getElementFromJsonResponse(jsonResponse, "definition");
     }
 
-    private String getDefinitionFromJsonString(String JsonString) {
-        JsonObject jsonObject = new Gson().fromJson(JsonString, JsonObject.class);
-        JsonArray jsonArray = jsonObject.getAsJsonArray("list");
-        jsonObject = jsonArray.get(0).getAsJsonObject();
-        System.out.println(jsonObject.get("definition").getAsString());
-
-        return jsonObject.get("definition").getAsString().replace("[", "").replace("]", "");
+    public String getExample(String term){
+        String jsonResponse;
+        String url = "http://api.urbandictionary.com/v0/define?term={" + term + "}";
+        jsonResponse = getResponseAsString(url);
+        return getElementFromJsonResponse(jsonResponse, "example");
     }
 
     private String getResponseAsString(String urlAsString){
@@ -53,5 +49,13 @@ public class UrbanDictionaryLookup implements IDefinitionLookup {
 
         }
         return jsonResponse;
+    }
+
+    private String getElementFromJsonResponse(String jsonResponse, String element){
+        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+        JsonArray jsonArray = jsonObject.getAsJsonArray("list");
+        jsonObject = jsonArray.get(0).getAsJsonObject();
+
+        return jsonObject.get(element).getAsString().replace("[", "").replace("]", "");
     }
 }
