@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class JavaTermsGlossary implements DefinitionLookup {
+public class JavaTermsGlossary implements IDefinitionLookup {
 
     private static String[][] glossary = new String[250][3];
 
@@ -36,6 +36,11 @@ public class JavaTermsGlossary implements DefinitionLookup {
     }
 
     public String getDefinition(final String term) {
+        try {
+            buildGlossary();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (isNullOrEmpty(term) || !term.matches("[a-zA-Z][a-zA-Z ]*")) {
             return "Please provide a valid term to receive a definition.";
         }

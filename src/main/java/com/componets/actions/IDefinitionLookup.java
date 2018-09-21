@@ -1,6 +1,6 @@
 package com.componets.actions;
 
-public interface DefinitionLookup {
+public interface IDefinitionLookup {
 
     String getDefinition(final String term);
 }

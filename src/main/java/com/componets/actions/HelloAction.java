@@ -1,8 +1,5 @@
 package com.componets.actions;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -14,29 +11,33 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.Gray;
 
-import javax.swing.*;
+import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class HelloAction extends AnAction {
+
+    private JavaTermsGlossary javaTermsGlossary;
+    private UrbanDictionaryLookup urbanDictionaryLookup;
+    private WordsAPILookup wordsAPILookup;
 
     private String elementKeyword;
     private String elementText;
 
     public void actionPerformed(AnActionEvent e) {
+        javaTermsGlossary = new JavaTermsGlossary();
+        urbanDictionaryLookup = new UrbanDictionaryLookup();
+        wordsAPILookup = new WordsAPILookup();
         getPsiClassFromContext(e);
         displayDialog();
     }
 
     private void displayDialog() {
-        String javaTermAndDefinition = "Java Term: " + elementText + "<br>Java Definition: " + getJavaDefinition(elementText);
-        String urbanTermAndDefinition = "Urban Term: " + elementText + "<br>Definition " + getDefinitionFromJsonString(getJSONString("http://api.urbandictionary.com/v0/define?term={" + elementText + "}")).replace("<br><br>", "<br>");
-        JEditorPane editorPane = new JEditorPane("text/html", "<font face=\"Nunito\">" + javaTermAndDefinition + "<br><br><br>" + urbanTermAndDefinition + "</font>");
+        String javaTermAndDefinition = "Java Glossary<br>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
+        String wordsApiTermAndDefinition = "Term: " + elementText + "<br>Definition: " + wordsAPILookup.getDefinition(elementText);
+        String urbanTermAndDefinition = "Urban Dictionary<br>Term: " + elementText + "<br>Definition: " + urbanDictionaryLookup.getDefinition(elementText);
+        JEditorPane editorPane = new JEditorPane("text/html", "<font face=\"Nunito\">" + javaTermAndDefinition + "<br><br><br>" + wordsApiTermAndDefinition + "<br><br><br>" + urbanTermAndDefinition +"</font>");
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 try {
@@ -78,54 +79,11 @@ public class HelloAction extends AnAction {
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
-    private String getJavaDefinition(String term) {
-        JavaTermsGlossary javaTermsGlossary = new JavaTermsGlossary();
-        try {
-            javaTermsGlossary.buildGlossary();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return javaTermsGlossary.getDefinition(term);
-    }
-
     private void setElementText(String elementText) {
         this.elementText = elementText;
     }
 
     private void setElementKeyword(String elementKeyword) {
         this.elementKeyword = elementKeyword;
-    }
-
-    private String getDefinitionFromJsonString(String JsonString) {
-        JsonObject jsonObject = new Gson().fromJson(JsonString, JsonObject.class);
-        JsonArray jsonArray = jsonObject.getAsJsonArray("list");
-        jsonObject = jsonArray.get(0).getAsJsonObject();
-        System.out.println(jsonObject.get("definition").getAsString());
-
-        return jsonObject.get("definition").getAsString();
-    }
-
-    private String getJSONString(String url){
-        String JsonString = "";
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            con.setRequestMethod("GET");
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-            StringBuffer sb = new StringBuffer();
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                JsonString += line;
-            }
-        } catch (MalformedURLException e){
-
-        } catch (IOException e){
-
-        }
-        return JsonString;
     }
 }
