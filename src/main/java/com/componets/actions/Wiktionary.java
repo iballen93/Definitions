@@ -7,28 +7,18 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class UrbanDictionaryLookup implements IDefinitionLookup {
+public class Wiktionary implements IDefinitionLookup {
 
     public String getDefinition(String term) {
-        String jsonResponse;
-        String url = "http://api.urbandictionary.com/v0/define?term={" + term + "}";
-
-        jsonResponse = getResponseAsString(url);
+        String url = "https://googledictionaryapi.eu-gb.mybluemix.net/?define=" + term;
+        String jsonResponse = getResponseAsString(url);
         return getElementFromJsonResponse(jsonResponse, "definition");
     }
 
-    public String getExample(String term){
-        String jsonResponse;
-        String url = "http://api.urbandictionary.com/v0/define?term={" + term + "}";
-        jsonResponse = getResponseAsString(url);
-        return getElementFromJsonResponse(jsonResponse, "example");
-    }
-
-    private String getResponseAsString(String urlAsString){
+    private String getResponseAsString(String urlAsString) {
         String jsonResponse = "";
 
         try {
@@ -50,12 +40,13 @@ public class UrbanDictionaryLookup implements IDefinitionLookup {
         return jsonResponse;
     }
 
-    private String getElementFromJsonResponse(String jsonResponse, String element){
+    private String getElementFromJsonResponse(String jsonResponse, String element) {
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
-        JsonArray jsonArray = jsonObject.getAsJsonArray("list");
-        if(jsonArray.size() > 0){
+        JsonObject jsonObject1 = jsonObject.getAsJsonObject("meaning");
+        JsonArray jsonArray = jsonObject1.getAsJsonArray("noun");
+        if (jsonArray.size() > 0) {
             jsonObject = jsonArray.get(0).getAsJsonObject();
-            return(jsonObject.get(element).getAsString().replace("[", "").replace("]", ""));
+            return (jsonObject.get(element).getAsString().replace("[", "").replace("]", ""));
         }
 
         return "";

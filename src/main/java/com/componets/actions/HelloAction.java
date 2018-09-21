@@ -5,14 +5,17 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.Gray;
+import org.fest.util.Strings;
 
 import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import java.io.IOException;
 
@@ -20,37 +23,18 @@ public class HelloAction extends AnAction {
 
     private JavaTermsGlossary javaTermsGlossary;
     private UrbanDictionaryLookup urbanDictionaryLookup;
-    private WordsAPILookup wordsAPILookup;
+    private Wiktionary wiktionary;
 
     private String elementKeyword;
+    private String elementLanguage;
     private String elementText;
 
     public void actionPerformed(AnActionEvent e) {
         javaTermsGlossary = new JavaTermsGlossary();
         urbanDictionaryLookup = new UrbanDictionaryLookup();
-        wordsAPILookup = new WordsAPILookup();
+        wiktionary = new Wiktionary();
         getPsiClassFromContext(e);
-        displayDialog();
-    }
-
-    private void displayDialog() {
-        String javaTermAndDefinition = "Java Glossary<br>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
-        String wordsApiTermAndDefinition = "Term: " + elementText + "<br>Definition: " + wordsAPILookup.getDefinition(elementText);
-        String urbanTermAndDefinition = "Urban Dictionary<br>Term: " + elementText + "<br>Definition: " + urbanDictionaryLookup.getDefinition(elementText);
-        String urbanTermExample = "<br>" + urbanDictionaryLookup.getExample(elementText);
-        JEditorPane editorPane = new JEditorPane("text/html", "<font face=\"Nunito\">" + javaTermAndDefinition + "<br><br><br>" + wordsApiTermAndDefinition + "<br><br><br>" + urbanTermAndDefinition + urbanTermExample + "</font>");
-        editorPane.addHyperlinkListener(e -> {
-            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                try {
-                    java.awt.Desktop.getDesktop().browse(java.net.URI.create(e.getURL().toString()));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-        editorPane.setEditable(false);
-        editorPane.setBackground(Gray._242);
-        JOptionPane.showMessageDialog(null, editorPane, "Definitions", JOptionPane.PLAIN_MESSAGE);
+        showUsersPopup();
     }
 
     @Override
@@ -69,6 +53,7 @@ public class HelloAction extends AnAction {
         PsiElement psiElement = psiFile.findElementAt(offset);
 
         setElementText(psiElement.getText().replace("\"", ""));
+        setElementLanguage(psiElement.getLanguage().getDisplayName());
 
         //TODO
         /*try {
@@ -80,8 +65,50 @@ public class HelloAction extends AnAction {
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
+    public void showUsersPopup() {
+        JEditorPane editorPane = new JEditorPane("text/html", "<font style=\"font-family:'monospace'\">" + getDefinitions() + "</font>");
+        editorPane.addHyperlinkListener(e -> {
+            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                try {
+                    java.awt.Desktop.getDesktop().browse(java.net.URI.create(e.getURL().toString()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        editorPane.setEditable(false);
+        editorPane.setBackground(Gray._242);
+
+        ComponentPopupBuilder builder = JBPopupFactory.getInstance().createComponentPopupBuilder(editorPane, null);
+        builder.setCancelOnClickOutside(true);
+
+        JBPopup popup = builder.createPopup();
+        popup.showInFocusCenter();
+    }
+
+    private String getDefinitions() {
+        String definitions = "";
+        String javaTermAndDefinition = "<h3>Java Glossary</h3>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
+        definitions += javaTermAndDefinition;
+
+        String dictionaryTerm = "<h3>Dictionary</h3>Term: " + elementText + "<br>Definition: " + wiktionary.getDefinition(elementText);
+        definitions += "<br><br><br>" + dictionaryTerm;
+
+        String urbanDefinition = urbanDictionaryLookup.getDefinition(elementText);
+        if (!Strings.isNullOrEmpty(urbanDefinition)) {
+            String urbanTermAndDefinition = "<h3>Urban Dictionary</h3>Term: " + elementText + "<br>Definition: " + urbanDefinition;
+            String urbanExample = "<br>Example: " + urbanDictionaryLookup.getExample(elementText);
+            definitions += "<br><br><br>" + urbanTermAndDefinition + urbanExample;
+        }
+        return definitions;
+    }
+
     private void setElementText(String elementText) {
         this.elementText = elementText;
+    }
+
+    private void setElementLanguage(String elementLanguage) {
+        this.elementLanguage = elementLanguage;
     }
 
     private void setElementKeyword(String elementKeyword) {
