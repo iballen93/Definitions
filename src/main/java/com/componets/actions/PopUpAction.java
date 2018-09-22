@@ -17,9 +17,10 @@ import org.fest.util.Strings;
 
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
+import java.awt.*;
 import java.io.IOException;
 
-public class HelloAction extends AnAction {
+public class PopUpAction extends AnAction {
 
     private JavaTermsGlossary javaTermsGlossary;
     private UrbanDictionaryLookup urbanDictionaryLookup;
@@ -34,7 +35,7 @@ public class HelloAction extends AnAction {
         urbanDictionaryLookup = new UrbanDictionaryLookup();
         wiktionary = new Wiktionary();
         getPsiClassFromContext(e);
-        showUsersPopup();
+        showUsersPopup(e);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class HelloAction extends AnAction {
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
-    public void showUsersPopup() {
+    public void showUsersPopup(AnActionEvent event) {
         JEditorPane editorPane = new JEditorPane("text/html", "<font style=\"font-family:'monospace'\">" + getDefinitions() + "</font>");
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
@@ -83,7 +84,11 @@ public class HelloAction extends AnAction {
         builder.setCancelOnClickOutside(true);
 
         JBPopup popup = builder.createPopup();
-        popup.showInFocusCenter();
+
+        popup.setSize(new Dimension(550, 500)); // dont see a good way for adjustable height.
+        popup.moveToFitScreen();
+        popup.showInBestPositionFor(PlatformDataKeys.EDITOR.getData(event.getDataContext()));
+
     }
 
     //TODO refactor out the checking of strings. Limit the max size of the intellij popup

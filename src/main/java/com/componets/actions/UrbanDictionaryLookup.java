@@ -57,7 +57,6 @@ public class UrbanDictionaryLookup implements IDefinitionLookup {
             jsonObject = jsonArray.get(0).getAsJsonObject();
             return(jsonObject.get(element).getAsString().replace("[", "").replace("]", ""));
         }
-
         return "";
     }
 }
