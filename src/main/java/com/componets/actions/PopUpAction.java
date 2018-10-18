@@ -13,17 +13,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.Gray;
+import com.intellij.ui.JBColor;
+import com.intellij.util.ui.UIUtil;
 import org.fest.util.Strings;
 
-import javax.swing.JEditorPane;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class PopUpAction extends AnAction {
 
     private JavaTermsGlossary javaTermsGlossary;
-    private UrbanDictionaryLookup urbanDictionaryLookup;
+    private UrbanDictionary urbanDictionary;
     private Wiktionary wiktionary;
 
     private String elementKeyword;
@@ -32,7 +35,7 @@ public class PopUpAction extends AnAction {
 
     public void actionPerformed(AnActionEvent e) {
         javaTermsGlossary = new JavaTermsGlossary();
-        urbanDictionaryLookup = new UrbanDictionaryLookup();
+        urbanDictionary = new UrbanDictionary();
         wiktionary = new Wiktionary();
         getPsiClassFromContext(e);
         showUsersPopup(e);
@@ -78,17 +81,19 @@ public class PopUpAction extends AnAction {
             }
         });
         editorPane.setEditable(false);
-        editorPane.setBackground(Gray._242);
+        if (UIUtil.isUnderDarcula()) {
+            editorPane.setBackground(JBColor.WHITE);
+        } else {
+            editorPane.setBackground(Gray._242);
+        }
 
         ComponentPopupBuilder builder = JBPopupFactory.getInstance().createComponentPopupBuilder(editorPane, null);
         builder.setCancelOnClickOutside(true);
 
         JBPopup popup = builder.createPopup();
-
         popup.setSize(new Dimension(550, 500)); // dont see a good way for adjustable height.
         popup.moveToFitScreen();
-        popup.showInBestPositionFor(PlatformDataKeys.EDITOR.getData(event.getDataContext()));
-
+        popup.showInBestPositionFor(Objects.requireNonNull(PlatformDataKeys.EDITOR.getData(event.getDataContext())));
     }
 
     //TODO refactor out the checking of strings. Limit the max size of the intellij popup
@@ -100,10 +105,10 @@ public class PopUpAction extends AnAction {
         String dictionaryTerm = "<h3>Dictionary</h3>Term: " + elementText + "<br>Definition: " + wiktionary.getDefinition(elementText);
         definitions += "<br><br><br>" + dictionaryTerm;
 
-        String urbanDefinition = urbanDictionaryLookup.getDefinition(elementText);
+        String urbanDefinition = urbanDictionary.getDefinition(elementText);
         if (!Strings.isNullOrEmpty(urbanDefinition)) {
             String urbanTermAndDefinition = "<h3>Urban Dictionary</h3>Term: " + elementText + "<br>Definition: " + urbanDefinition;
-            String urbanExample = "<br>Example: " + urbanDictionaryLookup.getExample(elementText);
+            String urbanExample = "<br>Example: " + urbanDictionary.getExample(elementText);
             definitions += "<br><br><br>" + urbanTermAndDefinition + urbanExample;
         }
         return definitions;

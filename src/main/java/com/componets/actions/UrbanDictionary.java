@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class UrbanDictionaryLookup implements IDefinitionLookup {
+public class UrbanDictionary implements IDefinitionLookup {
 
     public String getDefinition(String term) {
         String jsonResponse;

@@ -43,6 +43,9 @@ public class Wiktionary implements IDefinitionLookup {
     //TODO get adjective, noun, then verb.
     //https://googledictionaryapi.eu-gb.mybluemix.net/?define=specious
     private String getElementFromJsonResponse(String jsonResponse, String element) {
+        if (jsonResponse.isEmpty()) {
+            return "Definition not found.";
+        }
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
         JsonObject jsonObject1 = jsonObject.getAsJsonObject("meaning");
         JsonArray jsonArray = jsonObject1.getAsJsonArray("noun");
@@ -50,7 +53,6 @@ public class Wiktionary implements IDefinitionLookup {
             jsonObject = jsonArray.get(0).getAsJsonObject();
             return (jsonObject.get(element).getAsString().replace("[", "").replace("]", ""));
         }
-
-        return "";
+        return "Definition not found.";
     }
 }

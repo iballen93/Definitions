@@ -1,10 +1,10 @@
 <idea-plugin>
     <id>com.main.Definitions</id>
     <name>Definitions</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="ballen@vertafore.com" url="http://www.jetbrains.com">Vertafore</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
+    This plugin is designed to gather definitions from various sources.<br>
     <em>most HTML tags may be used</em>
     ]]></description>
 
@@ -25,7 +25,7 @@
     </project-components>
 
     <actions>
-        <action id="generateDialog" class="com.componets.actions.HelloAction" text="Get Definition" description="yo yo yo">
+        <action id="generateDialog" class="com.componets.actions.PopUpAction" text="Get Definition" description="yo yo yo">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>
