@@ -96,23 +96,20 @@ public class PopUpAction extends AnAction {
         popup.showInBestPositionFor(Objects.requireNonNull(PlatformDataKeys.EDITOR.getData(event.getDataContext())));
     }
 
-    //TODO refactor out the checking of strings. Limit the max size of the intellij popup
+    //TODO make this behave like javaTerms when def not found
     private String getDefinitions() {
         String definitions = "";
-        String javaTermAndDefinition = "<h3>Java Glossary</h3>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
-        definitions += javaTermAndDefinition;
+        definitions += "<h3>Java Glossary</h3>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
+        definitions += "<br><br><br>";
+        definitions += "<h3>Dictionary</h3>Definition: " + (Strings.isNullOrEmpty(wiktionary.getDefinition(elementText)) ? "not found" : wiktionary.getDef());
+        definitions += "<br><br><br>";
+        definitions += "<h3>Urban Dictionary</h3>Definition: " + (Strings.isNullOrEmpty(urbanDictionary.getDefinition(elementText)) ? "not found" : urbanDictionary.getDef());
+        definitions += "<br>";
+        definitions += (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : "<br>Example: " + urbanDictionary.getExm());
 
-        String dictionaryTerm = "<h3>Dictionary</h3>Term: " + elementText + "<br>Definition: " + wiktionary.getDefinition(elementText);
-        definitions += "<br><br><br>" + dictionaryTerm;
-
-        String urbanDefinition = urbanDictionary.getDefinition(elementText);
-        if (!Strings.isNullOrEmpty(urbanDefinition)) {
-            String urbanTermAndDefinition = "<h3>Urban Dictionary</h3>Term: " + elementText + "<br>Definition: " + urbanDefinition;
-            String urbanExample = "<br>Example: " + urbanDictionary.getExample(elementText);
-            definitions += "<br><br><br>" + urbanTermAndDefinition + urbanExample;
-        }
         return definitions;
     }
+
 
     private void setElementText(String elementText) {
         this.elementText = elementText;
