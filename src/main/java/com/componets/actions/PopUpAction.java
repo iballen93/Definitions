@@ -25,6 +25,8 @@ import java.util.Objects;
 
 public class PopUpAction extends AnAction {
 
+    private static final String DEFINITION = "<b>Definition: </b>";
+
     private JavaTermsGlossary javaTermsGlossary;
     private UrbanDictionary urbanDictionary;
     private Wiktionary wiktionary;
@@ -70,7 +72,7 @@ public class PopUpAction extends AnAction {
     }
 
     public void showUsersPopup(AnActionEvent event) {
-        JEditorPane editorPane = new JEditorPane("text/html", "<font style=\"font-family:'monospace'\">" + getDefinitions() + "</font>");
+        JEditorPane editorPane = new JEditorPane("text/html", applyFontFace( "Monospaced", getDefinitions()));
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 try {
@@ -99,17 +101,36 @@ public class PopUpAction extends AnAction {
     //TODO make this behave like javaTerms when def not found
     private String getDefinitions() {
         String definitions = "";
-        definitions += "<h3>Java Glossary</h3>Term: " + elementText + "<br>Definition: " + javaTermsGlossary.getDefinition(elementText);
-        definitions += "<br><br><br>";
-        definitions += "<h3>Dictionary</h3>Definition: " + (Strings.isNullOrEmpty(wiktionary.getDefinition(elementText)) ? "not found" : wiktionary.getDef());
-        definitions += "<br><br><br>";
-        definitions += "<h3>Urban Dictionary</h3>Definition: " + (Strings.isNullOrEmpty(urbanDictionary.getDefinition(elementText)) ? "not found" : urbanDictionary.getDef());
-        definitions += "<br>";
-        definitions += (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : "<br>Example: " + urbanDictionary.getExm());
-
+        definitions += applyBold("Term: ") + elementText;
+        definitions += "<br><br>";
+        definitions += applyFontSize(5, applyBold("Java Glossary<br>"));
+        definitions += DEFINITION + javaTermsGlossary.getDefinition(elementText);
+        definitions += "<br><br>";
+        definitions += applyFontSize(5, applyBold("Dictionary<br>"));
+        definitions += DEFINITION + (Strings.isNullOrEmpty(wiktionary.getDefinition(elementText)) ? "not found" : wiktionary.getDef());
+        definitions += "<br><br>";
+        definitions += applyFontSize(5, applyBold("Urban Dictionary<br>"));
+        definitions += DEFINITION + (Strings.isNullOrEmpty(urbanDictionary.getDefinition(elementText)) ? "not found" : urbanDictionary.getDef());
+        definitions += "<br><br>";
+        definitions += (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : applyBold("Example: ") + urbanDictionary.getExm());
         return definitions;
     }
 
+    private String applyBold(String input) {
+        return "<b>" + input + "</b>";
+    }
+
+    private String applyFontColor(String color, String input) {
+        return "<font color=\"" + color + "\">" + input + "</font>";
+    }
+
+    private String applyFontFace(String face, String input) {
+        return "<font face=\"" + face + "\">" + input + "</font>";
+    }
+
+    private String applyFontSize( int size, String input) {
+        return "<font size=\"" + size + "\">" + input + "</font>";
+    }
 
     private void setElementText(String elementText) {
         this.elementText = elementText;
