@@ -26,6 +26,7 @@ import java.util.Objects;
 public class PopUpAction extends AnAction {
 
     private static final String DEFINITION = "<b>Definition: </b>";
+    private static final String TERM = "<b>Term: </b>";
 
     private JavaTermsGlossary javaTermsGlossary;
     private UrbanDictionary urbanDictionary;
@@ -72,7 +73,7 @@ public class PopUpAction extends AnAction {
     }
 
     public void showUsersPopup(AnActionEvent event) {
-        JEditorPane editorPane = new JEditorPane("text/html", applyFontFace( "Monospaced", getDefinitions()));
+        JEditorPane editorPane = new JEditorPane("text/html", applyFontColor("black", applyFontFace("Monospaced", getDefinitions())));
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 try {
@@ -101,7 +102,7 @@ public class PopUpAction extends AnAction {
     //TODO make this behave like javaTerms when def not found
     private String getDefinitions() {
         String definitions = "";
-        definitions += applyBold("Term: ") + elementText;
+        definitions += applyFontSize(5,TERM + elementText);
         definitions += "<br><br>";
         definitions += applyFontSize(5, applyBold("Java Glossary<br>"));
         definitions += DEFINITION + javaTermsGlossary.getDefinition(elementText);
