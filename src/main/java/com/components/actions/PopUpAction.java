@@ -11,6 +11,7 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaToken;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
@@ -63,15 +64,9 @@ public class PopUpAction extends AnAction {
         int offset = editor.getCaretModel().getOffset();
         PsiElement psiElement = psiFile.findElementAt(offset);
 
-        setElementText(psiElement.getText().replace("\"", ""));
-        setElementLanguage(psiElement.getLanguage().getDisplayName());
-
-        //TODO
-        /*try {
-            setElementKeyword(((PsiKeywordImpl) psiElement).getTokenType().toString());
-        } catch (Exception e) {
-            setElementKeyword(((PsiIdentifierImpl) psiElement).getTokenType().toString());
-        }*/
+        setElementText(psiElement != null ? psiElement.getText().replace("\"", "") : "No element text");
+        setElementLanguage(psiElement != null ? psiElement.getLanguage().getDisplayName() : "No Language");
+        setElementKeyword(psiElement != null ? ((PsiJavaToken) psiElement).getTokenType().toString() : "No Keyword");
 
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
