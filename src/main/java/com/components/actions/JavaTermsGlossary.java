@@ -33,7 +33,7 @@ public class JavaTermsGlossary implements IDefinitionLookup {
         }
         String termGoogleUrl = "https://www.google.com/search?q=" + term.replace(" ", "%20");
         String javaTermGoogleUrl = "https://www.google.com/search?q=" + "Java%20" + term.replace(" ", "%20");
-        return "not found <br><br>Try using" + applyLink(termGoogleUrl, termGoogleUrl)
+        return "not found <br><br>Try using " + applyLink(termGoogleUrl, termGoogleUrl)
                 + "<br>or " + applyLink(javaTermGoogleUrl, javaTermGoogleUrl);
 
     }

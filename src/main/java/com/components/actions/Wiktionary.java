@@ -14,7 +14,7 @@ public class Wiktionary implements IDefinitionLookup {
         String url = "https://googledictionaryapi.eu-gb.mybluemix.net/?define=" + term;
         String jsonResponse = getResponseAsString(url);
         if (Strings.isNullOrEmpty(jsonResponse) ) {
-            return "not found";
+            return "";
         }
         definition = getElementFromJsonResponse(jsonResponse, "definition");
         return definition;
@@ -28,12 +28,12 @@ public class Wiktionary implements IDefinitionLookup {
             JsonObject jsonObject1 = jsonObject.getAsJsonObject("meaning");
             JsonArray jsonArray = jsonObject1.getAsJsonArray("noun");
             if (jsonArray == null) {
-                return "not found";
+                return "";
             }
             jsonObject = jsonArray.get(0).getAsJsonObject();
             return (jsonObject.get(element).getAsString().replace("[", "").replace("]", ""));
         } catch (JsonSyntaxException jse) {
-            return "not found";
+            return "";
         }
     }
 

@@ -32,6 +32,8 @@ public class PopUpAction extends AnAction {
 
     private static final String DEFINITION = "<b>Definition: </b>";
     private static final String TERM = "<b>Term: </b>";
+    private static final String LANGUAGE = "<b>Language: </b>";
+    private static final String TOKEN_TYPE = "<b>Token Type: </b>";
 
     private JavaTermsGlossary javaTermsGlossary;
     private UrbanDictionary urbanDictionary;
@@ -66,13 +68,13 @@ public class PopUpAction extends AnAction {
 
         setElementText(psiElement != null ? psiElement.getText().replace("\"", "") : "No Text");
         setElementLanguage(psiElement != null ? psiElement.getLanguage().getDisplayName() : "No Language");
-        setElementKeyword(psiElement != null ? ((PsiJavaToken) psiElement).getTokenType().toString() : "No Keyword");
+        setElementTokenType(psiElement != null ? ((PsiJavaToken) psiElement).getTokenType().toString() : "No Token Type");
 
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
     private void showUsersPopup(AnActionEvent event) {
-        JEditorPane editorPane = new JEditorPane("text/html", applyFontFace("Monospaced", elementKeyword + "<br>" + getDefinitions()));
+        JEditorPane editorPane = new JEditorPane("text/html", applyFontFace("Monospaced", getDefinitions()));
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 try {
@@ -101,18 +103,22 @@ public class PopUpAction extends AnAction {
     //TODO make this behave like javaTerms when def not found
     private String getDefinitions() {
         String definitions = "";
-        definitions += applyFontSize(5,TERM + elementText);
+        definitions += applyFontSize(4,TERM + elementText);
+        definitions += "<br>";
+        definitions += applyFontSize(4,LANGUAGE + elementLanguage);
+        definitions += "<br>";
+        definitions += applyFontSize(4, TOKEN_TYPE + elementKeyword);
         definitions += "<br><br>";
         definitions += applyFontSize(5, applyBold("Java Glossary<br>"));
-        definitions += DEFINITION + javaTermsGlossary.getDefinition(elementText);
+        definitions += applyFontSize(4, DEFINITION + javaTermsGlossary.getDefinition(elementText));
         definitions += "<br><br>";
         definitions += applyFontSize(5, applyBold("Dictionary<br>"));
-        definitions += DEFINITION + (Strings.isNullOrEmpty(wiktionary.getDefinition(elementText)) ? "not found" : wiktionary.getDef());
+        definitions += applyFontSize(4, DEFINITION + (Strings.isNullOrEmpty(wiktionary.getDefinition(elementText)) ? "not found" : wiktionary.getDef()));
         definitions += "<br><br>";
         definitions += applyFontSize(5, applyBold("Urban Dictionary<br>"));
-        definitions += DEFINITION + (Strings.isNullOrEmpty(urbanDictionary.getDefinition(elementText)) ? "not found" : urbanDictionary.getDef());
+        definitions += applyFontSize(4, DEFINITION + (Strings.isNullOrEmpty(urbanDictionary.getDefinition(elementText)) ? "not found" : urbanDictionary.getDef()));
         definitions += "<br><br>";
-        definitions += (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : applyBold("Example: ") + urbanDictionary.getExm());
+        definitions += applyFontSize(4, (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : applyBold("Example: ") + urbanDictionary.getExm()));
         return definitions;
     }
 
@@ -124,7 +130,7 @@ public class PopUpAction extends AnAction {
         this.elementLanguage = elementLanguage;
     }
 
-    private void setElementKeyword(String elementKeyword) {
+    private void setElementTokenType(String elementKeyword) {
         this.elementKeyword = elementKeyword;
     }
 }
