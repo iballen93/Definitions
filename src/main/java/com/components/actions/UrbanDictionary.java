@@ -1,4 +1,4 @@
-package com.componets.actions;
+package com.components.actions;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

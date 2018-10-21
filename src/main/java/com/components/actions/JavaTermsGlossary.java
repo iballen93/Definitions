@@ -1,4 +1,4 @@
-package com.componets.actions;
+package com.components.actions;
 
 import java.io.IOException;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.componets.actions;
+package com.components.actions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
