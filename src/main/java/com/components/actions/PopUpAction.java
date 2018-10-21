@@ -23,6 +23,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.components.actions.HtmlFormatter.applyBold;
+import static com.components.actions.HtmlFormatter.applyFontFace;
+import static com.components.actions.HtmlFormatter.applyFontSize;
+
 public class PopUpAction extends AnAction {
 
     private static final String DEFINITION = "<b>Definition: </b>";
@@ -72,8 +76,8 @@ public class PopUpAction extends AnAction {
         return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
     }
 
-    public void showUsersPopup(AnActionEvent event) {
-        JEditorPane editorPane = new JEditorPane("text/html", applyFontColor("black", applyFontFace("Monospaced", getDefinitions())));
+    private void showUsersPopup(AnActionEvent event) {
+        JEditorPane editorPane = new JEditorPane("text/html", applyFontFace("Monospaced", elementKeyword + "<br>" + getDefinitions()));
         editorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 try {
@@ -115,22 +119,6 @@ public class PopUpAction extends AnAction {
         definitions += "<br><br>";
         definitions += (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : applyBold("Example: ") + urbanDictionary.getExm());
         return definitions;
-    }
-
-    private String applyBold(String input) {
-        return "<b>" + input + "</b>";
-    }
-
-    private String applyFontColor(String color, String input) {
-        return "<font color=\"" + color + "\">" + input + "</font>";
-    }
-
-    private String applyFontFace(String face, String input) {
-        return "<font face=\"" + face + "\">" + input + "</font>";
-    }
-
-    private String applyFontSize( int size, String input) {
-        return "<font size=\"" + size + "\">" + input + "</font>";
     }
 
     private void setElementText(String elementText) {
