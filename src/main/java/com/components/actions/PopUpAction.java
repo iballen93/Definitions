@@ -64,7 +64,7 @@ public class PopUpAction extends AnAction {
         int offset = editor.getCaretModel().getOffset();
         PsiElement psiElement = psiFile.findElementAt(offset);
 
-        setElementText(psiElement != null ? psiElement.getText().replace("\"", "") : "No text");
+        setElementText(psiElement != null ? psiElement.getText().replace("\"", "") : "No Text");
         setElementLanguage(psiElement != null ? psiElement.getLanguage().getDisplayName() : "No Language");
         setElementKeyword(psiElement != null ? ((PsiJavaToken) psiElement).getTokenType().toString() : "No Keyword");
 
