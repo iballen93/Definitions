@@ -109,16 +109,25 @@ public class PopUpAction extends AnAction {
         definitions += "<br>";
         definitions += applyFontSize(4, TOKEN_TYPE + elementKeyword);
         definitions += "<br><br>";
+
         definitions += applyFontSize(5, applyBold("Java Glossary<br>"));
+        long start = System.nanoTime();
         definitions += applyFontSize(4, DEFINITION + javaTermsGlossary.getDefinition(elementText));
+        System.out.println(String.format("Java Terms Glossary Performance: %sms", (System.nanoTime() - start) / 1000000));
         definitions += "<br><br>";
+
         definitions += applyFontSize(5, applyBold("Dictionary<br>"));
+        start = System.nanoTime();
         definitions += applyFontSize(4, DEFINITION + (Strings.isNullOrEmpty(wiktionary.getDefinition(elementText)) ? "not found" : wiktionary.getDef()));
+        System.out.println(String.format("Wiktionary Performance: %sms", (System.nanoTime() - start) / 1000000));
         definitions += "<br><br>";
+
         definitions += applyFontSize(5, applyBold("Urban Dictionary<br>"));
+        start = System.nanoTime();
         definitions += applyFontSize(4, DEFINITION + (Strings.isNullOrEmpty(urbanDictionary.getDefinition(elementText)) ? "not found" : urbanDictionary.getDef()));
         definitions += "<br><br>";
         definitions += applyFontSize(4, (Strings.isNullOrEmpty(urbanDictionary.getExample(elementText)) ? "" : applyBold("Example: ") + urbanDictionary.getExm()));
+        System.out.println(String.format("Urban Dictionary Performance: %sms", (System.nanoTime() - start) / 1000000));
         return definitions;
     }
 
