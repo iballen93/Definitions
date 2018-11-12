@@ -1,0 +1,10 @@
+Backlog to keep track of bugs or new features
+
+
+BUGS
+-Urban Dictionary, Term=throws, definition is wacky with the word doesn't. Apostrophe is treated weird.
+-Urban Dictionary, Term=response, I think it thinks the term is responsibility.
+
+
+FEATURES
+-Config to allow user to select/deselect dictionaries (possibly under the Tools menu)
