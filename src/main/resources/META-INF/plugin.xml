@@ -28,6 +28,10 @@
         <action id="generateDialog" class="com.components.actions.PopUpAction" text="Get Definition" description="yo yo yo">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="DefinitionsToolMenu" class="com.components.actions.ToolsMenuAction" text="Definitions Plugin"
+                description="This action allows the user to toggle the definitions they want. Defaults to Java on and all others off.">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij"></extensions>
