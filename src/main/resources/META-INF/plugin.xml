@@ -1,28 +1,19 @@
-<idea-plugin>
-    <id>com.main.Definitions</id>
+<!-- url="" specifies the URL of the plugin homepage (displayed in the Welcome Screen and in "Plugins" settings dialog) -->
+<idea-plugin url="http://www.jetbrains.com/idea">
+
     <name>Definitions</name>
-    <vendor email="ballen@vertafore.com" url="http://www.jetbrains.com">Vertafore</vendor>
 
-    <description><![CDATA[
-    This plugin is designed to gather definitions from various sources.<br>
-    <em>most HTML tags may be used</em>
-    ]]></description>
+    <id>com.main.Definitions</id>
 
-    <change-notes>
-        change notes
-    </change-notes>
+    <description>Fun with definitions in intellij. This must be at least 40 characters.</description>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
-    </extensions>
+    <change-notes>There are lots of changes. This must be at least 40 characters.</change-notes>
 
-    <application-components>
+    <version>1.0.19</version>
 
-    </application-components>
+    <vendor url="http://www.jetbrains.com" email="support@jetbrains.com" />
 
-    <project-components>
-
-    </project-components>
+    <idea-version since-build="" until-build=""/>
 
     <actions>
         <action id="generateDialog" class="com.components.actions.PopUpAction" text="Get Definition" description="yo yo yo">
@@ -35,4 +26,5 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij"></extensions>
+
 </idea-plugin>
