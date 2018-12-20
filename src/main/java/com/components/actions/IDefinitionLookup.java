@@ -10,7 +10,7 @@ public interface IDefinitionLookup {
 
     String getDefinition(final String term);
 
-     default String getResponseAsString(String urlAsString){
+    default String getResponseAsString(String urlAsString) {
         String jsonResponse = "";
 
         try {

@@ -1,10 +1,12 @@
 package com.components.actions;
 
-import org.fest.util.Strings;
+
+import com.google.common.base.Strings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
+
 import static com.components.actions.HtmlFormatter.applyLink;
 
 public class JavaTermsGlossary implements IDefinitionLookup {

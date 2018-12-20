@@ -1,5 +1,6 @@
 package com.components.actions;
 
+import com.google.common.base.Strings;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -16,11 +17,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
-import org.fest.util.Strings;
 
-import javax.swing.*;
+import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -103,9 +103,9 @@ public class PopUpAction extends AnAction {
     //TODO make this behave like javaTerms when def not found
     private String getDefinitions() {
         String definitions = "";
-        definitions += applyFontSize(4,TERM + elementText);
+        definitions += applyFontSize(4, TERM + elementText);
         definitions += "<br>";
-        definitions += applyFontSize(4,LANGUAGE + elementLanguage);
+        definitions += applyFontSize(4, LANGUAGE + elementLanguage);
         definitions += "<br>";
         definitions += applyFontSize(4, TOKEN_TYPE + elementKeyword);
         definitions += "<br><br>";

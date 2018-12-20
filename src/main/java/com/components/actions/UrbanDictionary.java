@@ -37,11 +37,11 @@ public class UrbanDictionary implements IDefinitionLookup {
         return "";
     }
 
-    public String getDef(){
+    public String getDef() {
         return this.definition;
     }
 
-    public String getExm(){
+    public String getExm() {
         return this.example;
     }
 
