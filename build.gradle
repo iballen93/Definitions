@@ -19,7 +19,7 @@ dependencies {
 }
 
 patchPluginXml {
-    version 183.4588.61
+    version '183.4588.61'
     sinceBuild '182.3684.101'
 }
 
